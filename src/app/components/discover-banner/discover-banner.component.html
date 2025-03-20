@@ -1,0 +1,7 @@
+<div class="banner">
+    <div class="movie" *ngFor="let movie of movies">
+        <img [src]="imageBaseUrl + movie.poster_path" [alt]="movie.title">
+        <h1>{{movie.title}}</h1>
+        <p>{{movie.overview}}</p>
+    </div>
+</div>

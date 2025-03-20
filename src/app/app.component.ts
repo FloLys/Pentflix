@@ -13,12 +13,7 @@ export class AppComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    const authToken = this._authService.getRequestToken().subscribe((token) => {
-      console.log('Auth token:', token);
-    });
-
-    this._authService.newGuestSession().subscribe((session) => {
-      console.log('Guest session:', session);
-    });
+    this._authService.getRequestToken();
+    this._authService.newGuestSession();
   }
 }

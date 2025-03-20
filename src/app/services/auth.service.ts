@@ -1,41 +1,54 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { catchError, throwError } from 'rxjs';
 
+const { API_URL, API_KEY } = environment;
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  protected readonly apiKey = environment.API_KEY;
-  private readonly url = environment.API_URL;
-
   private httpOptions = {
     headers: new HttpHeaders({
       Accept: 'application/json',
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${API_KEY}`,
     }),
   };
 
   constructor(private _http: HttpClient) {}
 
   getRequestToken() {
-    return this._http.get(
-      `${this.url}/authentication/token/new`,
-      this.httpOptions
-    );
+    return this._http
+      .get(`${API_URL}/authentication/token/new`, this.httpOptions)
+      .pipe(
+        catchError((error) => {
+          console.error('Error:', error);
+          return throwError(() => new Error('Failed to create token'));
+        })
+      );
   }
 
   newGuestSession() {
-    return this._http.get(
-      `${this.url}/authentication/guest_session/new`,
-      this.httpOptions
-    );
+    return this._http
+      .get(`${API_URL}/authentication/guest_session/new`, this.httpOptions)
+      .pipe(
+        catchError((error) => {
+          console.error('Error:', error);
+          return throwError(
+            () => new Error('Failed to create a guest session')
+          );
+        })
+      );
   }
 
   getAccountDetails(guestSessionId: string) {
-    return this._http.get(
-      `${this.url}/account/${guestSessionId}`,
-      this.httpOptions
-    );
+    return this._http
+      .get(`${API_URL}/account/${guestSessionId}`, this.httpOptions)
+      .pipe(
+        catchError((error) => {
+          console.error('Error:', error);
+          return throwError(() => new Error('Failed to get account details'));
+        })
+      );
   }
 }
