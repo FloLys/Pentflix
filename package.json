@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prebuild": "source ~/.bashrc node config.ts",
-    "build": "ng build",
+    "prebuild": "source ~/.bashrc && node config.ts",
+    "build": "npm run prebuild && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:Pentflix": "node dist/pentflix/server/server.mjs"
