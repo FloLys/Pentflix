@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError, throwError } from 'rxjs';
+import { catchError, map, throwError } from 'rxjs';
 
 const { API_URL, API_KEY } = environment;
 @Injectable({
@@ -17,21 +17,11 @@ export class AuthService {
 
   constructor(private _http: HttpClient) {}
 
-  getRequestToken() {
-    return this._http
-      .get(`${API_URL}/authentication/token/new`, this.httpOptions)
-      .pipe(
-        catchError((error) => {
-          console.error('Error:', error);
-          return throwError(() => new Error('Failed to create token'));
-        })
-      );
-  }
-
   newGuestSession() {
     return this._http
       .get(`${API_URL}/authentication/guest_session/new`, this.httpOptions)
       .pipe(
+        map((response: any) => response.guest_session_id),
         catchError((error) => {
           console.error('Error:', error);
           return throwError(
@@ -41,10 +31,14 @@ export class AuthService {
       );
   }
 
-  getAccountDetails(guestSessionId: string) {
+  getAccountId(guestSessionId: string) {
     return this._http
       .get(`${API_URL}/account/${guestSessionId}`, this.httpOptions)
       .pipe(
+        map((response: any) => {
+          console.log('Response:', response.account_id);
+          return response.account_id;
+        }),
         catchError((error) => {
           console.error('Error:', error);
           return throwError(() => new Error('Failed to get account details'));
