@@ -1,0 +1,28 @@
+<div class="banner-container">
+  <button (click)="previousMovie()" class="arrow-button">
+    <img src="assets/chevron_left.png" class="arrow" />
+  </button>
+
+  <div class="banner" #banner>
+    <div class="movie" *ngFor="let movie of movies">
+      <div class="movie-info">
+        <button (click)="toggleFavorite()" class="fav-button">
+          <img
+            [src]="
+              isFavorite ? 'assets/check_circle.png' : 'assets/add_circle.png'
+            "
+            alt="favicon"
+          />
+          {{ isFavorite ? "Added to Favorites" : "Add to Favorites" }}
+        </button>
+        <h1>{{ movie.title }}</h1>
+        <p>{{ movie.overview }}</p>
+      </div>
+      <img [src]="imageBaseUrl + movie.poster_path" [alt]="movie.title" />
+    </div>
+  </div>
+
+  <button (click)="nextMovie()" class="arrow-button">
+    <img src="assets/chevron_right.png" class="arrow" />
+  </button>
+</div>
